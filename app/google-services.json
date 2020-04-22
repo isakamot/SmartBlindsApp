@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "685216854737",
+    "firebase_url": "https://boiler-blinds-3e00e.firebaseio.com",
+    "project_id": "boiler-blinds-3e00e",
+    "storage_bucket": "boiler-blinds-3e00e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:685216854737:android:bbb13ddc5948f6528acbf0",
+        "android_client_info": {
+          "package_name": "com.example.smartblinds"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "685216854737-898iv1a94o263cnfhq80slo165fgq45f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrJDKKDTgZIeP-t6V3ccd5bw98G9hcbh4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "685216854737-898iv1a94o263cnfhq80slo165fgq45f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

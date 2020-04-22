@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/start_login_btn"
+        android:layout_width="233dp"
+        android:layout_height="61dp"
+        android:layout_marginStart="89dp"
+        android:layout_marginTop="500dp"
+        android:layout_marginEnd="89dp"
+        android:layout_marginBottom="25dp"
+        android:text="@string/login"
+        app:layout_constraintBottom_toTopOf="@+id/start_new_user_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/start_new_user_btn"
+        android:layout_width="238dp"
+        android:layout_height="62dp"
+        android:layout_marginStart="89dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="89dp"
+        android:text="@string/new_user"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/start_login_btn" />
+</androidx.constraintlayout.widget.ConstraintLayout>

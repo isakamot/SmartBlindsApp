@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/main_logout_btn"
+        android:layout_width="114dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="43dp"
+        android:layout_marginBottom="24dp"
+        android:text="@string/logout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/main_temp_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="102dp"
+        android:layout_marginTop="102dp"
+        android:layout_marginEnd="103dp"
+        android:text="@string/temperature"
+        android:textSize="36sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/main_position_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="164dp"
+        android:layout_marginEnd="163dp"
+        android:text="@string/_100"
+        android:textSize="50sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_position_title" />
+
+    <TextView
+        android:id="@+id/main_temp_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="164dp"
+        android:layout_marginEnd="164dp"
+        android:text="@string/_00f"
+        android:textSize="50sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_temp_title" />
+
+    <TextView
+        android:id="@+id/main_position_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="139dp"
+        android:text="@string/position"
+        android:textSize="36sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_temp_txt" />
+
+    <Button
+        android:id="@+id/button8"
+        android:layout_width="114dp"
+        android:layout_height="188dp"
+        android:layout_marginEnd="43dp"
+        android:layout_marginBottom="22dp"
+        android:text="@string/manual"
+        app:layout_constraintBottom_toTopOf="@+id/main_logout_btn"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/main_light_btn"
+        android:layout_width="186dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="43dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="105dp"
+        android:text="@string/light"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_time_btn" />
+
+    <Button
+        android:id="@+id/main_time_btn"
+        android:layout_width="186dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="43dp"
+        android:layout_marginEnd="25dp"
+        android:text="@string/time"
+        app:layout_constraintBottom_toTopOf="@+id/main_light_btn"
+        app:layout_constraintEnd_toStartOf="@+id/button8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_temp_btn" />
+
+    <Button
+        android:id="@+id/main_temp_btn"
+        android:layout_width="186dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="43dp"
+        android:layout_marginTop="72dp"
+        android:layout_marginEnd="25dp"
+        android:text="@string/temperature"
+        app:layout_constraintBottom_toTopOf="@+id/main_time_btn"
+        app:layout_constraintEnd_toStartOf="@+id/button8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_position_txt" />
+
+    <Button
+        android:id="@+id/main_refresh_btn"
+        android:layout_width="186dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="43dp"
+        android:layout_marginBottom="24dp"
+        android:text="@string/refresh"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
