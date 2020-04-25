@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,7 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-
+import java.net.InetAddress;
 import java.util.List;
 
 public class new_setup_2 extends AppCompatActivity {
@@ -29,9 +30,11 @@ public class new_setup_2 extends AppCompatActivity {
     WifiConfiguration config;
     tcp TCP_stuff;
     String device_IP = "192.168.4.1";
+    String new_device_IP = "";
     ConnectTask connectTask;
     String rec_msg;
     String close_flag;
+    Intent myIntent2;
     boolean connected_flag;
     boolean check_done_flag;
 
@@ -87,8 +90,8 @@ public class new_setup_2 extends AppCompatActivity {
                 }
                 else if (networkInfo.isConnected() && connected_flag){
                     Toast.makeText(new_setup_2.this, "Success", Toast.LENGTH_SHORT).show();
-                    Intent myIntent2 = new Intent(new_setup_2.this, main.class);
-                    startActivity(myIntent2);
+                    myIntent2 = new Intent(new_setup_2.this, main.class);
+                    get_IP_address();
                 }
                 else{
                     Toast.makeText(new_setup_2.this, "Connecction Failed", Toast.LENGTH_LONG).show();
@@ -194,15 +197,54 @@ public class new_setup_2 extends AppCompatActivity {
         thread.start();
     }
 
+    public void get_IP_address(){
+        Runnable IP_runnable = new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    //Get Current WiFi's IP address
+                    WifiManager wifiMgr = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+                    WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
+                    int ip = wifiInfo.getIpAddress();
+                    String subnet = String.format("%d.%d.%d.", (ip & 0xff), (ip >> 8 & 0xff), (ip >> 16 & 0xff));
+
+                    int timeout = 10;
+                    for (int i = 1; i < 255; i++){
+                        String host = subnet + i;
+                        InetAddress address = InetAddress.getByName(host);
+                        if (address.isReachable(timeout)){
+                            if (address.getCanonicalHostName().contains("ESP")){
+                                new_device_IP = host;
+                                Log.d("MSG", new_device_IP);
+                                myIntent2.putExtra("DeviceIP", new_device_IP);
+                                startActivity(myIntent2);
+                            }
+                        }
+                    }
+                }
+                catch (Exception e) {
+                    Log.e("MSG", "Error", e);
+                }
+            }
+        };
+        Thread thread = new Thread(IP_runnable);
+        thread.start();
+    }
+
     public void Check_Flags (){
         Runnable running = new Runnable() {
             @Override
             public void run() {
                 while(rec_msg == null);
                 if (rec_msg.contains("OK")){
+                    Log.d("MSG", rec_msg);
                     TCP_stuff.stopClient();
                     connectTask.cancel(true);
                     close_flag = "True";
+                }
+                else if (rec_msg.matches(".*\\d.*")){
+                    Log.d("MSG", rec_msg);
+                    close_flag = "False";
                 }
                 else{
                     close_flag = "False";

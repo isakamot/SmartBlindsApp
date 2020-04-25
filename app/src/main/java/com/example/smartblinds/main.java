@@ -1,9 +1,6 @@
 package com.example.smartblinds;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,11 +17,10 @@ public class main extends AppCompatActivity {
     tcp TCP_stuff;
     Button temp_btn, time_btn, light_btn, logout_btn, refresh_btn;
     ConnectTask connectTask;
-    String device_IP ="10.0.0.137";
+    String device_IP;
     String msg, temp_data, pos_data;
     TextView temp_text, pos_text;
     FirebaseAuth firebaseAuth;
-    boolean close_flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -38,6 +34,13 @@ public class main extends AppCompatActivity {
         temp_text = findViewById(R.id.main_temp_txt);
         pos_text = findViewById(R.id.main_position_txt);
         firebaseAuth = FirebaseAuth.getInstance();
+        try{
+            device_IP = getIntent().getStringExtra("DeviceIP");
+        }catch (Exception e){
+            //Search for google cloud for device IP
+            //device_IP = ...
+            Log.d("MSG", "Got IP from google cloud");
+        }
         msg = "";
 
         connectTask = new ConnectTask();
