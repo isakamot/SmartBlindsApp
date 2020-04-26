@@ -242,10 +242,6 @@ public class new_setup_2 extends AppCompatActivity {
                     connectTask.cancel(true);
                     close_flag = "True";
                 }
-                else if (rec_msg.matches(".*\\d.*")){
-                    Log.d("MSG", rec_msg);
-                    close_flag = "False";
-                }
                 else{
                     close_flag = "False";
                 }

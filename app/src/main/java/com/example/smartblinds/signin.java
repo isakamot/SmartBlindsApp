@@ -2,6 +2,7 @@ package com.example.smartblinds;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -49,8 +50,8 @@ public class signin extends AppCompatActivity {
         login_btn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                String user_string = email.getText().toString();
-                String pass_string = password.getText().toString();
+                final String user_string = email.getText().toString();
+                final String pass_string = password.getText().toString();
                 if (user_string.isEmpty()){
                     email.setError("Provide your Email first");
                     email.requestFocus();
@@ -66,6 +67,8 @@ public class signin extends AppCompatActivity {
                     firebaseAuth.signInWithEmailAndPassword(user_string,pass_string).addOnCompleteListener(signin.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
+                            Log.d("user", user_string);
+                            Log.d("pass", pass_string);
                             if (!task.isSuccessful()) {
                                 Toast.makeText(signin.this, "Not sucessfull", Toast.LENGTH_SHORT).show();
                             } else {

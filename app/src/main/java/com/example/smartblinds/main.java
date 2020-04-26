@@ -21,6 +21,9 @@ public class main extends AppCompatActivity {
     String msg, temp_data, pos_data;
     TextView temp_text, pos_text;
     FirebaseAuth firebaseAuth;
+    FireStore fireStore;
+    Data document_data;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -34,18 +37,20 @@ public class main extends AppCompatActivity {
         temp_text = findViewById(R.id.main_temp_txt);
         pos_text = findViewById(R.id.main_position_txt);
         firebaseAuth = FirebaseAuth.getInstance();
-        try{
-            device_IP = getIntent().getStringExtra("DeviceIP");
-        }catch (Exception e){
-            //Search for google cloud for device IP
-            //device_IP = ...
-            Log.d("MSG", "Got IP from google cloud");
-        }
-        msg = "";
-
+        fireStore = new FireStore();
         connectTask = new ConnectTask();
-        connectTask.execute();
-        //Get_Init_Data();
+
+        device_IP = getIntent().getStringExtra("DeviceIP");
+        if (device_IP == null) {
+            get_IP_from_firestore();
+        }
+        else{
+            fireStore.init();
+            fireStore.update_data("DeviceIP", device_IP);
+            connectTask.execute();
+        }
+
+        msg = "";
         temp_text.setText("--F");
         pos_text.setText("--%");
 
@@ -94,6 +99,21 @@ public class main extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void get_IP_from_firestore() {
+        Runnable get_data = new Runnable() {
+            @Override
+            public void run() {
+                fireStore.get_data();
+                while ((document_data = fireStore.get_data_to_app()) == null);
+                device_IP = document_data.DeviceIP;
+                Log.d("msg", device_IP);
+                connectTask.execute();
+            }
+        };
+        Thread thread = new Thread(get_data);
+        thread.start();
     }
 
     public void GetTempData(){

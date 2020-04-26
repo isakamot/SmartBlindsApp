@@ -2,6 +2,7 @@ package com.example.smartblinds;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,8 +35,8 @@ public class sign_up extends AppCompatActivity {
         sign_up_btn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                String email_str = email.getText().toString();
-                String password_str = email.getText().toString();
+                final String email_str = email.getText().toString();
+                final String password_str = password.getText().toString();
                 if (email_str.isEmpty()) {
                     email.setError("Provide your email first");
                     email.requestFocus();
@@ -51,6 +52,8 @@ public class sign_up extends AppCompatActivity {
                     firebaseAuth.createUserWithEmailAndPassword(email_str, password_str).addOnCompleteListener(sign_up.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
+                            Log.d("user", email_str);
+                            Log.d("pass", password_str);
                             if(!task.isSuccessful()){
                                 Toast.makeText(sign_up.this.getApplicationContext(), "Sign up unsucessful:" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             }

@@ -17,9 +17,12 @@ public class temp_config extends AppCompatActivity {
     EditText temp_close_et, temp_open_et;
     Button save_btn;
     String temp_close, temp_open;
-    String device_IP = "10.0.0.191";
+    String device_IP;
+    String message;
     tcp TCP_stuff;
     ConnectTask connectTask;
+    Boolean done_close;
+    Boolean done_open;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +34,10 @@ public class temp_config extends AppCompatActivity {
         save_btn = findViewById(R.id.temp_config_save_btn);
         fireStore = new FireStore();
         connectTask = new ConnectTask();
+        done_close = false;
+        done_open = false;
 
         Get_Data();
-        connectTask.execute();
 
         save_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,15 +47,16 @@ public class temp_config extends AppCompatActivity {
                 fireStore.update_data("Temp_Close", temp_close);
                 fireStore.update_data("Temp_Open", temp_open);
                 if(TCP_stuff != null){
-                    TCP_stuff.sendMessage("TEMP_CLOSE/"+temp_close+"\r\n");
-                    TCP_stuff.sendMessage("TEMP_OPEN/"+temp_open+"\r\n");
+                    send_config_data();
                 }
+
             }
         });
     }
 
     @Override
     public void onBackPressed(){
+        Log.d("MSG", "Going back");
         TCP_stuff.stopClient();
         connectTask.cancel(true);
         Intent i = new Intent(temp_config.this, main.class);
@@ -73,9 +78,38 @@ public class temp_config extends AppCompatActivity {
                         Log.d("Done", "Done");
                     }
                 });
+
+                //Connect to Blinds
+                device_IP = document_data.DeviceIP;
+                connectTask.execute();
             }
         };
         Thread thread = new Thread(get_data);
+        thread.start();
+    }
+
+    public void send_config_data(){
+        Runnable send_data = new Runnable() {
+            @Override
+            public void run() {
+                int i;
+
+                Log.d("MSG", "Sending temp close");
+                TCP_stuff.sendMessage("TEMP_CLOSE/"+temp_close+"\r\n");
+                while(done_close == false);
+                try{
+                    Thread.sleep(700);
+                }
+                catch (Exception e){
+                    Log.e("Error", "Error",e);
+                }
+                Log.d("MSG", "Sending temp open");
+                TCP_stuff.sendMessage("TEMP_OPEN/"+temp_open+"\r\n");
+                while (done_open == false);
+                Log.d("MSG", "DONE");
+            }
+        };
+        Thread thread = new Thread(send_data);
         thread.start();
     }
 
@@ -97,6 +131,15 @@ public class temp_config extends AppCompatActivity {
             super.onProgressUpdate(values);
             //response received from server
             Log.d("test", "response " + values[0]);
+            message = values[0];
+            if (message.contains("CLOSE_OK")){
+                done_close = true;
+                Log.d("MSG", "DONE close");
+            }
+            else if (message.contains("OPEN_OK")){
+                done_open = true;
+                Log.d("MSG", "DONE OPEN");
+            }
         }
     }
 }
