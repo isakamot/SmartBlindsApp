@@ -18,8 +18,8 @@ public class main extends AppCompatActivity {
     Button temp_btn, time_btn, light_btn, logout_btn, refresh_btn;
     ConnectTask connectTask;
     String device_IP;
-    String msg, temp_data, pos_data;
-    TextView temp_text, pos_text;
+    String msg, temp_data, pos_data, bat_data;
+    TextView temp_text, pos_text, battery_text;
     FirebaseAuth firebaseAuth;
     FireStore fireStore;
     Data document_data;
@@ -36,6 +36,7 @@ public class main extends AppCompatActivity {
         refresh_btn = findViewById(R.id.main_refresh_btn);
         temp_text = findViewById(R.id.main_temp_txt);
         pos_text = findViewById(R.id.main_position_txt);
+        battery_text = findViewById(R.id.main_battery_txt);
         firebaseAuth = FirebaseAuth.getInstance();
         fireStore = new FireStore();
         connectTask = new ConnectTask();
@@ -53,6 +54,7 @@ public class main extends AppCompatActivity {
         msg = "";
         temp_text.setText("--F");
         pos_text.setText("--%");
+        battery_text.setText("--%");
 
         temp_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,8 +87,7 @@ public class main extends AppCompatActivity {
         refresh_btn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                GetTempData();
-                GetPosData();
+                GetRefreshData();
             }
         });
 
@@ -116,41 +117,46 @@ public class main extends AppCompatActivity {
         thread.start();
     }
 
-    public void GetTempData(){
+    public void GetRefreshData(){
         final Handler handler = new Handler();
         Runnable get_data = new Runnable() {
             @Override
-            public void run()  {
-                if (TCP_stuff != null){
-                    TCP_stuff.sendMessage("RQ_TEMP\r\n");
-                    while(temp_data==null);
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            temp_text.setText(temp_data);
-                            Log.d("Done", "Done");
-                        }
-                    });
-                }
-            }
-        };
-        Thread thread = new Thread(get_data);
-        thread.start();
-    }
+            public void run() {
+                if (TCP_stuff != null) {
 
-    public void GetPosData(){
-        final Handler handler = new Handler();
-        Runnable get_data = new Runnable() {
-            @Override
-            public void run()  {
-                if (TCP_stuff != null){
+                    //Get Current Temperature Data
+                    TCP_stuff.sendMessage("RQ_TEMP\r\n");
+                    while (temp_data == null);
+                    try{
+                        Thread.sleep(800);
+                    }
+                    catch (Exception e){
+                        Log.e("WAIT", "Error",e);
+                    }
+
+                    //Get Current Blind Position Data
                     TCP_stuff.sendMessage("RQ_POS\r\n");
                     while(pos_data == null);
+                    try{
+                        Thread.sleep(800);
+                    }
+                    catch (Exception e){
+                        Log.e("WAIT", "Error",e);
+                    }
+
+                    //Get Current Battery Data
+                    TCP_stuff.sendMessage("RQ_BAT\r\n");
+                    while(bat_data == null);
+
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            pos_text.setText(pos_data);
-                            Log.d("Done", "Done");
+                            temp_text.setText(temp_data+"F");
+                            Log.d("Done", "Done Temp");
+                            pos_text.setText(pos_data+"%");
+                            Log.d("Done", "Done POS");
+                            battery_text.setText(bat_data+"%");
+                            Log.d("Done", "Done BAT");
                         }
                     });
                 }
@@ -212,6 +218,12 @@ public class main extends AppCompatActivity {
                 pos_data = pos_data.replace("POS", "");
                 pos_data = pos_data.replace("\r\n", "");
                 Log.d("POS", pos_data);
+            }
+            if (msg.contains("BAT")){
+                bat_data = msg;
+                bat_data = pos_data.replace("BAT", "");
+                bat_data = pos_data.replace("\r\n", "");
+                Log.d("BAT", pos_data);
             }
         }
     }

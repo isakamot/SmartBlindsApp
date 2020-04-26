@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="102dp"
-        android:layout_marginTop="102dp"
+        android:layout_marginTop="25dp"
         android:layout_marginEnd="103dp"
         android:text="@string/temperature"
         android:textSize="36sp"
@@ -44,6 +44,19 @@
         app:layout_constraintTop_toBottomOf="@+id/main_position_title" />
 
     <TextView
+        android:id="@+id/main_battery_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="164dp"
+        android:layout_marginEnd="163dp"
+        android:text="@string/_100"
+        android:textSize="50sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.605"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_battery_title" />
+
+    <TextView
         android:id="@+id/main_temp_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -60,7 +73,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="140dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="139dp"
         android:text="@string/position"
         android:textSize="36sp"
@@ -109,7 +122,7 @@
         android:layout_width="186dp"
         android:layout_height="60dp"
         android:layout_marginStart="43dp"
-        android:layout_marginTop="72dp"
+        android:layout_marginTop="155dp"
         android:layout_marginEnd="25dp"
         android:text="@string/temperature"
         app:layout_constraintBottom_toTopOf="@+id/main_time_btn"
@@ -126,5 +139,18 @@
         android:text="@string/refresh"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/main_battery_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="148dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="148dp"
+        android:text="@string/battery"
+        android:textSize="36sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_position_txt" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

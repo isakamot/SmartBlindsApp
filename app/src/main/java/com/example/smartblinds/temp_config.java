@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -98,7 +99,7 @@ public class temp_config extends AppCompatActivity {
                 TCP_stuff.sendMessage("TEMP_CLOSE/"+temp_close+"\r\n");
                 while(done_close == false);
                 try{
-                    Thread.sleep(700);
+                    Thread.sleep(1000);
                 }
                 catch (Exception e){
                     Log.e("Error", "Error",e);
@@ -107,6 +108,8 @@ public class temp_config extends AppCompatActivity {
                 TCP_stuff.sendMessage("TEMP_OPEN/"+temp_open+"\r\n");
                 while (done_open == false);
                 Log.d("MSG", "DONE");
+
+                Toast.makeText(temp_config.this, "Successfully Saved", Toast.LENGTH_SHORT).show();
             }
         };
         Thread thread = new Thread(send_data);
