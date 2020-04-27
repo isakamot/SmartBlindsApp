@@ -29,4 +29,11 @@
     <string name="logout">Logout</string>
     <string name="refresh">Refresh</string>
     <string name="battery">Battery</string>
+    <string name="light_configuration">Light Configuration</string>
+    <string name="if_bright">If bright,</string>
+    <string name="if_dark">If dark,</string>
+    <string-array name="OPEN_CLOSE">
+        <item>OPEN</item>
+        <item>CLOSE</item>
+    </string-array>
 </resources>

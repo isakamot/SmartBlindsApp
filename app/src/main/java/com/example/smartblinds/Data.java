@@ -5,4 +5,6 @@ public class Data {
     public String Temp_Close;
     public String Temp_Open;
     public String DeviceIP;
+    public String Bright;
+    public String Dark;
 }

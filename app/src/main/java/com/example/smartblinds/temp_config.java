@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -50,7 +52,6 @@ public class temp_config extends AppCompatActivity {
                 if(TCP_stuff != null){
                     send_config_data();
                 }
-
             }
         });
     }
@@ -93,23 +94,27 @@ public class temp_config extends AppCompatActivity {
         Runnable send_data = new Runnable() {
             @Override
             public void run() {
-                int i;
 
                 Log.d("MSG", "Sending temp close");
                 TCP_stuff.sendMessage("TEMP_CLOSE/"+temp_close+"\r\n");
-                while(done_close == false);
+                while(!done_close);
                 try{
-                    Thread.sleep(1000);
+                    Thread.sleep(800);
                 }
                 catch (Exception e){
                     Log.e("Error", "Error",e);
                 }
                 Log.d("MSG", "Sending temp open");
                 TCP_stuff.sendMessage("TEMP_OPEN/"+temp_open+"\r\n");
-                while (done_open == false);
+                while (!done_open);
                 Log.d("MSG", "DONE");
 
-                Toast.makeText(temp_config.this, "Successfully Saved", Toast.LENGTH_SHORT).show();
+                //Notify user that it is done
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(temp_config.this, "Successfully Saved", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         };
         Thread thread = new Thread(send_data);

@@ -30,6 +30,8 @@ public class FireStore extends Activity {
        data.put("Email", email);
        data.put("Temp_Close", "0");
        data.put("Temp_Open", "0");
+       data.put("Bright", "CLOSE");
+       data.put("Dark", "CLOSE");
 
        fb.collection("users").document(email)
                .set(data)

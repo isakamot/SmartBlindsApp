@@ -23,6 +23,7 @@ public class main extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     FireStore fireStore;
     Data document_data;
+    boolean temp_config, light_config, time_config;
 
 
     @Override
@@ -40,6 +41,9 @@ public class main extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         fireStore = new FireStore();
         connectTask = new ConnectTask();
+        temp_config = false;
+        time_config = false;
+        light_config = false;
 
         device_IP = getIntent().getStringExtra("DeviceIP");
         if (device_IP == null) {
@@ -61,7 +65,8 @@ public class main extends AppCompatActivity {
             public void onClick(View v) {
                 if (TCP_stuff != null){
                     TCP_stuff.sendMessage("TEMP_CONFIG\r\n");
-                    check_close_flag();
+                    temp_config = true;
+                    go_to_new_page();
                 }
             }
         });
@@ -71,6 +76,8 @@ public class main extends AppCompatActivity {
             public void onClick(View v){
                 if (TCP_stuff != null){
                     TCP_stuff.sendMessage("TIME_CONFIG\r\n");
+                    time_config = true;
+                    go_to_new_page();
                 }
             }
         });
@@ -80,6 +87,8 @@ public class main extends AppCompatActivity {
             public void onClick(View v){
                 if (TCP_stuff != null){
                     TCP_stuff.sendMessage("LIGHT_CONFIG\r\n");
+                    light_config = true;
+                    go_to_new_page();
                 }
             }
         });
@@ -166,7 +175,7 @@ public class main extends AppCompatActivity {
         thread.start();
     }
 
-    public void check_close_flag(){
+    public void go_to_new_page(){
         final Handler handler = new Handler();
         Runnable close_task = new Runnable() {
             @Override
@@ -178,8 +187,16 @@ public class main extends AppCompatActivity {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Intent myIntent = new Intent(main.this, temp_config.class);
-                        startActivity(myIntent);
+                        if (temp_config) {
+                            temp_config = false;
+                            Intent myIntent = new Intent(main.this, temp_config.class);
+                            startActivity(myIntent);
+                         }
+                        else if (light_config){
+                            light_config = false;
+                            Intent myIntent = new Intent(main.this, light_config.class);
+                            startActivity(myIntent);
+                        }
                     }
                 });
 

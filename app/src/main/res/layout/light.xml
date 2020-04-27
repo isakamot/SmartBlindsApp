@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/light_config_save"
+        android:layout_width="233dp"
+        android:layout_height="61dp"
+        android:layout_marginStart="89dp"
+        android:layout_marginEnd="89dp"
+        android:layout_marginBottom="100dp"
+        android:text="@string/save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Spinner
+        android:id="@+id/light_dark_spinner"
+        android:layout_width="173dp"
+        android:layout_height="81dp"
+        android:layout_marginTop="96dp"
+        android:layout_marginEnd="36dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/light_bright_spinner" />
+
+    <TextView
+        android:id="@+id/light_title"
+        android:layout_width="411dp"
+        android:layout_height="94dp"
+        android:layout_marginTop="43dp"
+        android:text="@string/light_configuration"
+        android:textAlignment="center"
+        android:textSize="36sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/light_dark_txt"
+        android:layout_width="142dp"
+        android:layout_height="133dp"
+        android:layout_marginTop="42dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/if_dark"
+        android:textSize="50sp"
+        app:layout_constraintEnd_toStartOf="@+id/light_dark_spinner"
+        app:layout_constraintTop_toBottomOf="@+id/light_bright_txt" />
+
+    <Spinner
+        android:id="@+id/light_bright_spinner"
+        android:layout_width="173dp"
+        android:layout_height="81dp"
+        android:layout_marginTop="116dp"
+        android:layout_marginEnd="36dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/light_title" />
+
+    <TextView
+        android:id="@+id/light_bright_txt"
+        android:layout_width="142dp"
+        android:layout_height="133dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="62dp"
+        android:text="@string/if_bright"
+        android:textSize="50sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/light_title" />
+</androidx.constraintlayout.widget.ConstraintLayout>
