@@ -7,4 +7,6 @@ public class Data {
     public String DeviceIP;
     public String Bright;
     public String Dark;
+    public String Time_Open;
+    public String Time_Close;
 }

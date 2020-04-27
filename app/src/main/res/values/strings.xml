@@ -32,8 +32,15 @@
     <string name="light_configuration">Light Configuration</string>
     <string name="if_bright">If bright,</string>
     <string name="if_dark">If dark,</string>
+    <string name="time_configuration">Time Configuration</string>
+    <string name="time_col">:</string>
+    <string name="_00">00</string>
     <string-array name="OPEN_CLOSE">
         <item>OPEN</item>
         <item>CLOSE</item>
+    </string-array>
+    <string-array name="AM_PM">
+        <item>AM</item>
+        <item>PM</item>
     </string-array>
 </resources>

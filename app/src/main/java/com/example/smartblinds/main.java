@@ -197,6 +197,11 @@ public class main extends AppCompatActivity {
                             Intent myIntent = new Intent(main.this, light_config.class);
                             startActivity(myIntent);
                         }
+                        else if (time_config){
+                            time_config = false;
+                            Intent myIntent = new Intent(main.this, time_config.class);
+                            startActivity(myIntent);
+                        }
                     }
                 });
 
