@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/manual_title"
+        android:layout_width="411dp"
+        android:layout_height="94dp"
+        android:layout_marginTop="43dp"
+        android:text="@string/manual_control"
+        android:textAlignment="center"
+        android:textSize="45sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/manual_up"
+        android:layout_width="250dp"
+        android:layout_height="90dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="103dp"
+        android:layout_marginEnd="81dp"
+        android:text="@string/up"
+        android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/manual_title" />
+
+    <Button
+        android:id="@+id/manual_down"
+        android:layout_width="250dp"
+        android:layout_height="90dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="81dp"
+        android:text="@string/down"
+        android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/manual_pitch_up" />
+
+    <Button
+        android:id="@+id/manual_pitch_down"
+        android:layout_width="115dp"
+        android:layout_height="105dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="81dp"
+        android:text="@string/pitch_down"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/manual_up" />
+
+    <Button
+        android:id="@+id/manual_pitch_up"
+        android:layout_width="115dp"
+        android:layout_height="105dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/pitch_up"
+        android:textSize="25sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/manual_up" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

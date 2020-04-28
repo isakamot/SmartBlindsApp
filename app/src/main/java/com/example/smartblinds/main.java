@@ -15,7 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class main extends AppCompatActivity {
     tcp TCP_stuff;
-    Button temp_btn, time_btn, light_btn, logout_btn, refresh_btn;
+    Button temp_btn, time_btn, light_btn, logout_btn, refresh_btn, manual_btn;
     ConnectTask connectTask;
     String device_IP;
     String msg, temp_data, pos_data, bat_data;
@@ -23,7 +23,7 @@ public class main extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     FireStore fireStore;
     Data document_data;
-    boolean temp_config, light_config, time_config;
+    boolean temp_config, light_config, time_config, manual_flag;
 
 
     @Override
@@ -38,6 +38,7 @@ public class main extends AppCompatActivity {
         temp_text = findViewById(R.id.main_temp_txt);
         pos_text = findViewById(R.id.main_position_txt);
         battery_text = findViewById(R.id.main_battery_txt);
+        manual_btn = findViewById(R.id.main_manual_btn);
         firebaseAuth = FirebaseAuth.getInstance();
         fireStore = new FireStore();
         connectTask = new ConnectTask();
@@ -88,6 +89,17 @@ public class main extends AppCompatActivity {
                 if (TCP_stuff != null){
                     TCP_stuff.sendMessage("LIGHT_CONFIG\r\n");
                     light_config = true;
+                    go_to_new_page();
+                }
+            }
+        });
+
+        manual_btn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                if (TCP_stuff != null){
+                    TCP_stuff.sendMessage("MANUAL\r\n");
+                    manual_flag = true;
                     go_to_new_page();
                 }
             }
@@ -200,6 +212,11 @@ public class main extends AppCompatActivity {
                         else if (time_config){
                             time_config = false;
                             Intent myIntent = new Intent(main.this, time_config.class);
+                            startActivity(myIntent);
+                        }
+                        else if (manual_flag){
+                            manual_flag = false;
+                            Intent myIntent = new Intent(main.this, manual_control.class);
                             startActivity(myIntent);
                         }
                     }
