@@ -9,4 +9,7 @@ public class Data {
     public String Dark;
     public String Time_Open;
     public String Time_Close;
+    public String CUR_Temp;
+    public String CUR_Bat;
+    public String CUR_Pos;
 }

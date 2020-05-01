@@ -56,6 +56,10 @@ public class main extends AppCompatActivity {
         bat_data = "";
         msg = "";
         device_IP = "";
+        msg = "";
+        temp_text.setText("--F");
+        pos_text.setText("--%");
+        battery_text.setText("--%");
 
         device_IP = getIntent().getStringExtra("DeviceIP");
         if (device_IP == null) {
@@ -66,11 +70,6 @@ public class main extends AppCompatActivity {
             fireStore.update_data("DeviceIP", device_IP);
             connectTask.execute();
         }
-
-        msg = "";
-        temp_text.setText("--F");
-        pos_text.setText("--%");
-        battery_text.setText("--%");
 
         temp_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,11 +134,20 @@ public class main extends AppCompatActivity {
     }
 
     public void get_IP_from_firestore() {
+        final Handler handler = new Handler();
         Runnable get_data = new Runnable() {
             @Override
             public void run() {
                 fireStore.get_data();
                 while ((document_data = fireStore.get_data_to_app()) == null);
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        pos_text.setText(document_data.CUR_Pos+"°");
+                        battery_text.setText(document_data.CUR_Bat+"%");
+                        temp_text.setText(document_data.CUR_Temp+"F");
+                    }
+                });
                 device_IP = document_data.DeviceIP;
                 Log.d("msg", device_IP);
                 connectTask.execute();
@@ -160,7 +168,7 @@ public class main extends AppCompatActivity {
                     TCP_stuff.sendMessage("RQ_TEMP\r\n");
                     while (temp_data.equals(""));
                     try{
-                        Thread.sleep(1100);
+                        Thread.sleep(2000);
                     }
                     catch (Exception e){
                         Log.e("WAIT", "Error",e);
@@ -170,7 +178,7 @@ public class main extends AppCompatActivity {
                     TCP_stuff.sendMessage("RQ_POS\r\n");
                     while(pos_data.equals(""));
                     try{
-                        Thread.sleep(1100);
+                        Thread.sleep(2000);
                     }
                     catch (Exception e){
                         Log.e("WAIT", "Error",e);
@@ -181,7 +189,7 @@ public class main extends AppCompatActivity {
                     while(bat_data.equals(""));
 
                     try{
-                        Thread.sleep(1100);
+                        Thread.sleep(2000);
                     }
                     catch (Exception e){
                         Log.e("WAIT", "Error",e);
@@ -200,6 +208,9 @@ public class main extends AppCompatActivity {
                             Log.d("Done", "Done BAT");
                         }
                     });
+                    fireStore.update_data("CUR_Temp", temp_data);
+                    fireStore.update_data("CUR_Pos", pos_data);
+                    fireStore.update_data("CUR_Bat", bat_data);
                 }
             }
         };

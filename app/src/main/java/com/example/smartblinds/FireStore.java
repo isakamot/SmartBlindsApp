@@ -34,6 +34,9 @@ public class FireStore extends Activity {
        data.put("Dark", "CLOSE");
        data.put("Time_Open", "12:00AM");
        data.put("Time_Close", "11:59PM");
+       data.put("CUR_Temp", "--");
+       data.put("CUR_Pos", "--");
+       data.put("CUR_Bat", "--");
 
        fb.collection("users").document(email)
                .set(data)
