@@ -39,6 +39,7 @@ public class new_setup_2 extends AppCompatActivity {
     Button nxt_btn;
     boolean connected_flag;
     boolean check_done_flag;
+    boolean done_flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,8 +192,38 @@ public class new_setup_2 extends AppCompatActivity {
                                 while(!networkInfo.isConnected());
 
                                 //find ip address
-                                while (new_device_IP.isEmpty()){
-                                    get_IP_address();
+                                runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        Toast.makeText(new_setup_2.this, "Still Connecting...", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                                while (new_device_IP.equals("")){
+                                    try{
+                                        //Get Current WiFi's IP address
+                                        WifiManager wifiMgr = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+                                        WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
+                                        int ip = wifiInfo.getIpAddress();
+                                        String subnet = String.format("%d.%d.%d.", (ip & 0xff), (ip >> 8 & 0xff), (ip >> 16 & 0xff));
+                                        int timeout = 10;
+                                        for (int i = 1; i < 255; i++){
+                                            String host = subnet + i;
+                                            InetAddress address = InetAddress.getByName(host);
+                                            if (address.isReachable(timeout)){
+                                                if (address.getCanonicalHostName().contains("ESP")){
+                                                    new_device_IP = host;
+                                                    Log.d("MSG", new_device_IP);
+                                                    runOnUiThread(new Runnable() {
+                                                        public void run() {
+                                                            Toast.makeText(new_setup_2.this, "Still Connecting...", Toast.LENGTH_LONG).show();
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        }
+                                    }
+                                    catch (Exception e) {
+                                        Log.e("MSG", "Error", e);
+                                    }
                                 }
 
                                 //After finding the ip address, set button to visible
@@ -220,42 +251,6 @@ public class new_setup_2 extends AppCompatActivity {
             }
         };
         Thread thread = new Thread(conn_task);
-        thread.start();
-    }
-
-    public void get_IP_address(){
-        Runnable IP_runnable = new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    //Get Current WiFi's IP address
-                    WifiManager wifiMgr = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
-                    WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
-                    int ip = wifiInfo.getIpAddress();
-                    String subnet = String.format("%d.%d.%d.", (ip & 0xff), (ip >> 8 & 0xff), (ip >> 16 & 0xff));
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            Toast.makeText(new_setup_2.this, "Still Connecting...", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    int timeout = 10;
-                    for (int i = 1; i < 255; i++){
-                        String host = subnet + i;
-                        InetAddress address = InetAddress.getByName(host);
-                        if (address.isReachable(timeout)){
-                            if (address.getCanonicalHostName().contains("ESP")){
-                                new_device_IP = host;
-                                Log.d("MSG", new_device_IP);
-                            }
-                        }
-                    }
-                }
-                catch (Exception e) {
-                    Log.e("MSG", "Error", e);
-                }
-            }
-        };
-        Thread thread = new Thread(IP_runnable);
         thread.start();
     }
 
