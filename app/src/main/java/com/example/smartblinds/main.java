@@ -299,8 +299,8 @@ public class main extends AppCompatActivity {
             }
             if (msg.contains("BAT")){
                 bat_data = msg;
-                bat_data = pos_data.replace("BAT", "");
-                bat_data = pos_data.replace("\r\n", "");
+                bat_data = bat_data.replace("BAT", "");
+                bat_data = bat_data.replace("\r\n", "");
                 Log.d("BAT", pos_data);
             }
         }

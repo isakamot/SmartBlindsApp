@@ -207,13 +207,22 @@ public class new_setup_2 extends AppCompatActivity {
                     WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
                     int ip = wifiInfo.getIpAddress();
                     String subnet = String.format("%d.%d.%d.", (ip & 0xff), (ip >> 8 & 0xff), (ip >> 16 & 0xff));
-
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(new_setup_2.this, "Still Connecting...", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     int timeout = 10;
                     for (int i = 1; i < 255; i++){
                         String host = subnet + i;
                         InetAddress address = InetAddress.getByName(host);
                         if (address.isReachable(timeout)){
                             if (address.getCanonicalHostName().contains("ESP")){
+                                runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        Toast.makeText(new_setup_2.this, "Connected", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                                 new_device_IP = host;
                                 Log.d("MSG", new_device_IP);
                                 myIntent2.putExtra("DeviceIP", new_device_IP);
