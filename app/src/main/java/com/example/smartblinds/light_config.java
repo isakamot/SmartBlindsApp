@@ -1,5 +1,6 @@
 package com.example.smartblinds;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -141,7 +142,17 @@ public class light_config extends AppCompatActivity {
                 }
             });
             TCP_stuff.set_ip(device_IP);
-            TCP_stuff.run();
+            if (!TCP_stuff.run()){
+                //Show error message
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(light_config.this);
+                        builder.setMessage("Connection Failed Please Restart App");
+                        builder.setTitle("Error");
+                        builder.create().show();
+                    }
+                });
+            }
             return null;
         }
         @Override
