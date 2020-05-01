@@ -27,6 +27,7 @@ public class temp_config extends AppCompatActivity {
     ConnectTask connectTask;
     Boolean done_close;
     Boolean done_open;
+    Boolean close;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,7 @@ public class temp_config extends AppCompatActivity {
         connectTask = new ConnectTask();
         done_close = false;
         done_open = false;
+        close = false;
 
         Get_Data();
 
@@ -60,6 +62,7 @@ public class temp_config extends AppCompatActivity {
     @Override
     public void onBackPressed(){
         Log.d("MSG", "Going back");
+        close = true;
         TCP_stuff.stopClient();
         connectTask.cancel(true);
         Intent i = new Intent(temp_config.this, main.class);
@@ -133,14 +136,17 @@ public class temp_config extends AppCompatActivity {
             });
             TCP_stuff.set_ip(device_IP);
             //Show error message
-            runOnUiThread(new Runnable() {
-                public void run() {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(temp_config.this);
-                    builder.setMessage("Connection Failed Please Restart App");
-                    builder.setTitle("Error");
-                    builder.create().show();
-                }
-            });
+            if (!TCP_stuff.run() && !close) {
+                //Show error message
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(temp_config.this);
+                        builder.setMessage("Connection Failed Please Restart App");
+                        builder.setTitle("Error");
+                        builder.create().show();
+                    }
+                });
+            }
             return null;
         }
         @Override

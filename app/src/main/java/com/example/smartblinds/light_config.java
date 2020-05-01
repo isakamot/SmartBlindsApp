@@ -24,7 +24,7 @@ public class light_config extends AppCompatActivity {
     tcp TCP_stuff;
     ConnectTask connectTask;
     ArrayAdapter<String> spinner_array_adapter;
-    Boolean done_bright, done_dark;
+    Boolean done_bright, done_dark, close;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,7 @@ public class light_config extends AppCompatActivity {
         done_dark = false;
         fireStore = new FireStore();
         connectTask = new ConnectTask();
-
+        close = false;
         //Initialize Spinner
         spinner_array_adapter = new ArrayAdapter<>(
                 light_config.this, R.layout.custom_spinner, getResources().getStringArray(R.array.OPEN_CLOSE)
@@ -102,6 +102,7 @@ public class light_config extends AppCompatActivity {
     public void onBackPressed(){
         Log.d("MSG", "Going back");
         TCP_stuff.stopClient();
+        close = true;
         connectTask.cancel(true);
         Intent i = new Intent(light_config.this, main.class);
         startActivity(i);
@@ -142,7 +143,7 @@ public class light_config extends AppCompatActivity {
                 }
             });
             TCP_stuff.set_ip(device_IP);
-            if (!TCP_stuff.run()){
+            if (!TCP_stuff.run() && !close){
                 //Show error message
                 runOnUiThread(new Runnable() {
                     public void run() {

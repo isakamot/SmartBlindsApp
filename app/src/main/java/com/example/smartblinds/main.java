@@ -51,6 +51,11 @@ public class main extends AppCompatActivity {
         temp_config = false;
         time_config = false;
         light_config = false;
+        temp_data = "";
+        pos_data = "";
+        bat_data = "";
+        msg = "";
+        device_IP = "";
 
         device_IP = getIntent().getStringExtra("DeviceIP");
         if (device_IP == null) {
@@ -153,9 +158,9 @@ public class main extends AppCompatActivity {
 
                     //Get Current Temperature Data
                     TCP_stuff.sendMessage("RQ_TEMP\r\n");
-                    while (temp_data == null);
+                    while (temp_data.equals(""));
                     try{
-                        Thread.sleep(800);
+                        Thread.sleep(1100);
                     }
                     catch (Exception e){
                         Log.e("WAIT", "Error",e);
@@ -163,9 +168,9 @@ public class main extends AppCompatActivity {
 
                     //Get Current Blind Position Data
                     TCP_stuff.sendMessage("RQ_POS\r\n");
-                    while(pos_data == null);
+                    while(pos_data.equals(""));
                     try{
-                        Thread.sleep(800);
+                        Thread.sleep(1100);
                     }
                     catch (Exception e){
                         Log.e("WAIT", "Error",e);
@@ -173,12 +178,10 @@ public class main extends AppCompatActivity {
 
                     //Get Current Battery Data
                     TCP_stuff.sendMessage("RQ_BAT\r\n");
-                    while(bat_data == null);
+                    while(bat_data.equals(""));
 
-                    TCP_stuff.sendMessage("RQ_POS\r\n");
-                    while(pos_data == null);
                     try{
-                        Thread.sleep(800);
+                        Thread.sleep(1100);
                     }
                     catch (Exception e){
                         Log.e("WAIT", "Error",e);
@@ -236,22 +239,22 @@ public class main extends AppCompatActivity {
                     @Override
                     public void run() {
                         if (temp_config) {
-                            temp_config = false;
+
                             Intent myIntent = new Intent(main.this, temp_config.class);
                             startActivity(myIntent);
                          }
                         else if (light_config){
-                            light_config = false;
+
                             Intent myIntent = new Intent(main.this, light_config.class);
                             startActivity(myIntent);
                         }
                         else if (time_config){
-                            time_config = false;
+
                             Intent myIntent = new Intent(main.this, time_config.class);
                             startActivity(myIntent);
                         }
                         else if (manual_flag){
-                            manual_flag = false;
+
                             Intent myIntent = new Intent(main.this, manual_control.class);
                             startActivity(myIntent);
                         }
@@ -274,7 +277,7 @@ public class main extends AppCompatActivity {
             });
 
             TCP_stuff.set_ip(device_IP);
-            if (!TCP_stuff.run()){
+            if (!TCP_stuff.run() && !(temp_config || light_config || manual_flag || time_config)){
                 //Show error message
                 runOnUiThread(new Runnable() {
                     public void run() {

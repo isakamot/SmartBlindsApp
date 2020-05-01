@@ -29,7 +29,7 @@ public class time_config extends AppCompatActivity {
     tcp TCP_stuff;
     ConnectTask connectTask;
     ArrayAdapter<String> spinner_array_adapter;
-    Boolean done_open, done_close;
+    Boolean done_open, done_close, close;
 
 
     @Override
@@ -48,7 +48,7 @@ public class time_config extends AppCompatActivity {
         connectTask = new ConnectTask();
         done_close = false;
         done_open = false;
-
+        close = false;
         //Initialize Spinner
         spinner_array_adapter = new ArrayAdapter<>(
                 time_config.this, R.layout.custom_spinner, getResources().getStringArray(R.array.AM_PM)
@@ -105,6 +105,7 @@ public class time_config extends AppCompatActivity {
     public void onBackPressed(){
         Log.d("MSG", "Going back");
         TCP_stuff.stopClient();
+        close = true;
         connectTask.cancel(true);
         Intent i = new Intent(time_config.this, main.class);
         startActivity(i);
@@ -196,14 +197,17 @@ public class time_config extends AppCompatActivity {
             });
             TCP_stuff.set_ip(device_IP);
             //Show error message
-            runOnUiThread(new Runnable() {
-                public void run() {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(time_config.this);
-                    builder.setMessage("Connection Failed Please Restart App");
-                    builder.setTitle("Error");
-                    builder.create().show();
-                }
-            });
+            if (!TCP_stuff.run() && !close) {
+                //Show error message
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(time_config.this);
+                        builder.setMessage("Connection Failed Please Restart App");
+                        builder.setTitle("Error");
+                        builder.create().show();
+                    }
+                });
+            }
             return null;
         }
         @Override
