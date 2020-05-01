@@ -67,9 +67,6 @@ public class main extends AppCompatActivity {
         pos_text.setText("--%");
         battery_text.setText("--%");
 
-        //Send Current time to micro
-        send_curr_time();
-
         temp_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -177,6 +174,17 @@ public class main extends AppCompatActivity {
                     //Get Current Battery Data
                     TCP_stuff.sendMessage("RQ_BAT\r\n");
                     while(bat_data == null);
+
+                    TCP_stuff.sendMessage("RQ_POS\r\n");
+                    while(pos_data == null);
+                    try{
+                        Thread.sleep(800);
+                    }
+                    catch (Exception e){
+                        Log.e("WAIT", "Error",e);
+                    }
+
+                    send_curr_time();
 
                     handler.post(new Runnable() {
                         @Override

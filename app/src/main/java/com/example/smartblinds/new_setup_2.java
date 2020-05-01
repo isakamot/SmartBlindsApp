@@ -9,6 +9,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -35,6 +36,7 @@ public class new_setup_2 extends AppCompatActivity {
     String rec_msg;
     String close_flag;
     Intent myIntent2;
+    Button nxt_btn;
     boolean connected_flag;
     boolean check_done_flag;
 
@@ -47,7 +49,7 @@ public class new_setup_2 extends AppCompatActivity {
         device_pass = findViewById(R.id.device_password);
 
         final Button connect_btn = findViewById(R.id.connect_btn);
-        final Button nxt_btn = findViewById(R.id.connect_nxt_btn);
+        nxt_btn = findViewById(R.id.connect_nxt_btn);
 
         connectTask = new ConnectTask();
 
@@ -55,8 +57,10 @@ public class new_setup_2 extends AppCompatActivity {
         device_name.setText(access_point_name);
         initialize(getApplicationContext());
 
+
         if (!access_point_name.contains("SmartBlinds")){
             connectTask.execute();
+            nxt_btn.setVisibility(View.GONE);
         }
 
         connect_btn.setOnClickListener(new View.OnClickListener(){
@@ -79,9 +83,6 @@ public class new_setup_2 extends AppCompatActivity {
             public void onClick(View view) {
                 conMan= (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
                 networkInfo = conMan.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-                if (networkInfo.isConnected()){
-                    Log.d("Connected", "Connected");
-                }
                 if (access_point_name.contains("SmartBlinds") && networkInfo.isConnected() && connected_flag){
                     Toast.makeText(new_setup_2.this, "Success", Toast.LENGTH_SHORT).show();
                     Intent myIntent = new Intent(new_setup_2.this, new_setup.class);
@@ -91,7 +92,8 @@ public class new_setup_2 extends AppCompatActivity {
                 else if (networkInfo.isConnected() && connected_flag){
                     Toast.makeText(new_setup_2.this, "Success", Toast.LENGTH_SHORT).show();
                     myIntent2 = new Intent(new_setup_2.this, main.class);
-                    get_IP_address();
+                    myIntent2.putExtra("DeviceIP", new_device_IP);
+                    startActivity(myIntent2);
                 }
                 else{
                     Toast.makeText(new_setup_2.this, "Connecction Failed", Toast.LENGTH_LONG).show();
@@ -152,9 +154,12 @@ public class new_setup_2 extends AppCompatActivity {
     }
 
     public void ConnectionTask(){
+        final Handler handler = new Handler();
         Runnable conn_task = new Runnable() {
             @Override
             public void run() {
+                conMan= (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+                networkInfo = conMan.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
                 //Connect to Smart Blinds
                 if (access_point_name.contains("SmartBlinds")){
                     if (connect_to_device(access_point_name, password)){
@@ -170,13 +175,34 @@ public class new_setup_2 extends AppCompatActivity {
                     String wifi_credentials = String.format("\""+access_point_name+"\","+"\""+password+"\"");
                     if (TCP_stuff != null){
                         Log.d("Sending", "Sending...");
+                        //Send wifi credentials
                         TCP_stuff.sendMessage(wifi_credentials);
                         check_done_flag = false;
+
+                        //Wait until it gets ack from blinds
                         Check_Flags();
                         while(!check_done_flag);
+
                         if (close_flag.contains("True")){
-                            Log.d("Closed", "Closed");
+                            //Connect to wifi
                             if (connect_to_device(access_point_name, password)){
+
+                                //Wait until phone is connected to wifi
+                                while(!networkInfo.isConnected());
+
+                                //find ip address
+                                while (new_device_IP.isEmpty()){
+                                    get_IP_address();
+                                }
+
+                                //After finding the ip address, set button to visible
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        nxt_btn.setVisibility(View.VISIBLE);
+                                    }
+                                });
+
                                 connected_flag = true;
                                 Log.d("Connected", "Connected");
                             }
@@ -218,15 +244,8 @@ public class new_setup_2 extends AppCompatActivity {
                         InetAddress address = InetAddress.getByName(host);
                         if (address.isReachable(timeout)){
                             if (address.getCanonicalHostName().contains("ESP")){
-                                runOnUiThread(new Runnable() {
-                                    public void run() {
-                                        Toast.makeText(new_setup_2.this, "Connected", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
                                 new_device_IP = host;
                                 Log.d("MSG", new_device_IP);
-                                myIntent2.putExtra("DeviceIP", new_device_IP);
-                                startActivity(myIntent2);
                             }
                         }
                     }
