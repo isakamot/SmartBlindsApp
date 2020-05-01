@@ -1,6 +1,4 @@
 package com.example.smartblinds;
-import android.net.wifi.WifiConfiguration;
-import android.net.wifi.WifiManager;
 import android.util.Log;
 
 
@@ -16,19 +14,15 @@ import java.net.Socket;
 public class tcp{
 
     private String device_ip;
-    Socket socket;
     PrintWriter printWriter;
     BufferedReader bufferedReader;
     private OnMessageReceived mMessageListener = null;
     String mServerMessage;
     boolean mRun;
-    String msg;
-    tcp TCP_stuff;
 
     public void set_ip (String ip){
         device_ip = ip;
     }
-
 
     public tcp(OnMessageReceived listener){
         mMessageListener = listener;
@@ -60,7 +54,7 @@ public class tcp{
         mServerMessage = null;
     }
 
-    public void run() {
+    public boolean run() {
         mRun = true;
         try {
             InetAddress serverAddr = InetAddress.getByName(device_ip);
@@ -84,6 +78,8 @@ public class tcp{
         } catch (Exception e) {
             Log.e("TCP", "Error", e);
         }
+        Log.d("ERROR", "ERROR");
+        return false;
     }
 
     public interface OnMessageReceived{

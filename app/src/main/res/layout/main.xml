@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="164dp"
         android:layout_marginEnd="163dp"
-        android:text="@string/_100"
+        android:text="@string/_00_degree"
         android:textSize="50sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -75,10 +75,10 @@
         android:layout_marginStart="140dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="139dp"
-        android:text="@string/position"
+        android:text="@string/slats_angle"
         android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/main_temp_txt" />
 

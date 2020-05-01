@@ -9,9 +9,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import android.app.AlertDialog;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class main extends AppCompatActivity {
     tcp TCP_stuff;
@@ -24,7 +31,6 @@ public class main extends AppCompatActivity {
     FireStore fireStore;
     Data document_data;
     boolean temp_config, light_config, time_config, manual_flag;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -60,6 +66,9 @@ public class main extends AppCompatActivity {
         temp_text.setText("--F");
         pos_text.setText("--%");
         battery_text.setText("--%");
+
+        //Send Current time to micro
+        send_curr_time();
 
         temp_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,6 +196,25 @@ public class main extends AppCompatActivity {
         thread.start();
     }
 
+    public void send_curr_time(){
+        Runnable send_time = new Runnable() {
+            @Override
+            public void run() {
+                Date currentTime = Calendar.getInstance().getTime();
+                String time = currentTime.toString();
+                Pattern p = Pattern.compile("[0-9]{2}:[0-9]{2}");
+                Matcher m = p.matcher(time);
+                if (m.find()){
+                    time = m.group(0);
+                    Log.d("Time", time);
+                    TCP_stuff.sendMessage("CUR_TIME/"+time+"\r\n");
+                }
+            }
+        };
+        Thread thread = new Thread(send_time);
+        thread.start();
+    }
+
     public void go_to_new_page(){
         final Handler handler = new Handler();
         Runnable close_task = new Runnable() {
@@ -236,8 +264,19 @@ public class main extends AppCompatActivity {
                     publishProgress(message);
                 }
             });
+
             TCP_stuff.set_ip(device_IP);
-            TCP_stuff.run();
+            if (!TCP_stuff.run()){
+                //Show error message
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(main.this);
+                        builder.setMessage("Connection Failed Please Restart App");
+                        builder.setTitle("Error");
+                        builder.create().show();
+                    }
+                });
+            }
             return null;
         }
         @Override
@@ -266,6 +305,5 @@ public class main extends AppCompatActivity {
             }
         }
     }
-
 
 }

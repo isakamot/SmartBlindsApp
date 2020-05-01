@@ -42,6 +42,8 @@
     <string name="turn_left">Turn Left</string>
     <string name="pitch_down">pitch down</string>
     <string name="pitch_up">Pitch up</string>
+    <string name="_00_degree">00°</string>
+    <string name="slats_angle">Slats Angle</string>
     <string-array name="OPEN_CLOSE">
         <item>OPEN</item>
         <item>CLOSE</item>
