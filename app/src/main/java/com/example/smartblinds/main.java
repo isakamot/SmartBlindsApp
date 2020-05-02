@@ -31,6 +31,7 @@ public class main extends AppCompatActivity {
     FireStore fireStore;
     Data document_data;
     boolean temp_config, light_config, time_config, manual_flag;
+    boolean done;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -51,6 +52,7 @@ public class main extends AppCompatActivity {
         temp_config = false;
         time_config = false;
         light_config = false;
+        done = false;
         temp_data = "";
         pos_data = "";
         bat_data = "";
@@ -165,38 +167,9 @@ public class main extends AppCompatActivity {
                 if (TCP_stuff != null) {
 
                     //Get Current Temperature Data
-                    TCP_stuff.sendMessage("RQ_TEMP\r\n");
-                    while (temp_data.equals(""));
-                    try{
-                        Thread.sleep(2000);
-                    }
-                    catch (Exception e){
-                        Log.e("WAIT", "Error",e);
-                    }
-
-                    //Get Current Blind Position Data
-                    TCP_stuff.sendMessage("RQ_POS\r\n");
-                    while(pos_data.equals(""));
-                    try{
-                        Thread.sleep(2000);
-                    }
-                    catch (Exception e){
-                        Log.e("WAIT", "Error",e);
-                    }
-
-                    //Get Current Battery Data
-                    TCP_stuff.sendMessage("RQ_BAT\r\n");
-                    while(bat_data.equals(""));
-
-                    try{
-                        Thread.sleep(2000);
-                    }
-                    catch (Exception e){
-                        Log.e("WAIT", "Error",e);
-                    }
-
+                    done = false;
                     send_curr_time();
-
+                    while(!done);
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -307,23 +280,15 @@ public class main extends AppCompatActivity {
             //response received from server
             Log.d("test", "response " + values[0]);
             msg = values[0];
-            if (msg.contains("TEMP")){
-                temp_data = msg;
-                temp_data = temp_data.replace("TEMP", "");
-                temp_data = temp_data.replace("\r\n", "");
-                Log.d("TEMP", temp_data);
-            }
-            if (msg.contains("POS")){
-                pos_data = msg;
-                pos_data = pos_data.replace("POS", "");
-                pos_data = pos_data.replace("\r\n", "");
-                Log.d("POS", pos_data);
-            }
-            if (msg.contains("BAT")){
-                bat_data = msg;
-                bat_data = bat_data.replace("BAT", "");
-                bat_data = bat_data.replace("\r\n", "");
-                Log.d("BAT", pos_data);
+            if  (msg.contains("REF")){
+                String data = msg;
+                data = data.replace("REF", "");
+                data = data.replace("\r\n", "");
+                temp_data = data.split(",")[0];
+                bat_data = data.split(",")[1];
+                pos_data = data.split(",")[2];
+                Log.d("DATA", temp_data+","+bat_data+","+pos_data);
+                done = true;
             }
         }
     }
